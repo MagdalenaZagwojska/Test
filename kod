@@ -1,0 +1,45 @@
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.openqa.selenium.*;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+import java.util.concurrent.TimeUnit;
+
+public class virusAlert {
+    WebDriver driver;
+
+    @BeforeEach
+    public void setup() {
+        System.setProperty("webdriver.chrome.driver", "src/main/resources/chromedriver.exe");
+        driver = new ChromeDriver();
+        driver.manage().window().setSize(new Dimension(1260, 760));
+        driver.manage().window().setPosition(new Point(75, 20));
+        driver.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
+        driver.navigate().to("https://jsfiddle.net/nm134se7/");
+        driver.switchTo().frame("result");
+    }
+
+    @AfterEach
+    public void end (){
+        driver.close();
+        driver.quit();
+    }
+
+    @Test
+    public void confirmTrue() {
+        buttonConfirm();
+        driver.switchTo().alert().accept();
+    }
+
+    @Test
+    public void confirmFalse(){
+        buttonConfirm();
+        driver.switchTo().alert().dismiss();
+    }
+
+    private void buttonConfirm(){
+       WebElement javaScriptConfirm = driver.findElement(By.cssSelector("button[onclick='confirmFunction()']"));
+       javaScriptConfirm.click();
+    }
+}
